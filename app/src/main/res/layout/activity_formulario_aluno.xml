@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".ui.activity.FormularioAlunoActivity">
+
+        <EditText
+            android:id="@+id/activity_formulario_aluno_campo_nome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:autofillHints="@string/nome"
+            android:hint="@string/nome"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/activity_formulario_aluno_campo_telefone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/nome"
+            android:hint="@string/telefone"
+            android:inputType="phone"
+            app:layout_constraintEnd_toEndOf="@id/activity_formulario_aluno_campo_nome"
+            app:layout_constraintStart_toStartOf="@id/activity_formulario_aluno_campo_nome"
+            app:layout_constraintTop_toBottomOf="@id/activity_formulario_aluno_campo_nome" />
+
+
+        <EditText
+            android:id="@+id/activity_formulario_aluno_campo_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/nome"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            app:layout_constraintEnd_toEndOf="@id/activity_formulario_aluno_campo_telefone"
+            app:layout_constraintStart_toStartOf="@id/activity_formulario_aluno_campo_telefone"
+            app:layout_constraintTop_toBottomOf="@id/activity_formulario_aluno_campo_telefone" />
+
+        <Button
+            android:id="@+id/activity_formulario_aluno_botao_salvar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/salvar"
+            app:layout_constraintEnd_toEndOf="@id/activity_formulario_aluno_campo_email"
+            app:layout_constraintStart_toStartOf="@id/activity_formulario_aluno_campo_email"
+            app:layout_constraintTop_toBottomOf="@id/activity_formulario_aluno_campo_email" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
