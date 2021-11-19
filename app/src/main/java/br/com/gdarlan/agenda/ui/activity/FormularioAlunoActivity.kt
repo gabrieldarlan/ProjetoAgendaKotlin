@@ -3,39 +3,73 @@ package br.com.gdarlan.agenda.ui.activity
 import android.os.Bundle
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import br.com.gdarlan.agenda.dao.AlunosDao
+import br.com.gdarlan.agenda.dao.AlunoDao
 import br.com.gdarlan.agenda.databinding.ActivityFormularioAlunoBinding
 import br.com.gdarlan.agenda.model.Aluno
 
 class FormularioAlunoActivity : AppCompatActivity() {
     companion object {
-        private val tituloAppBar = "Novo Aluno"
+        private val tituloAppBarNovoAluno = "Novo Aluno"
+        private val CHAVE_ALUNO = "aluno"
+        private val tituloAppBarEditaAluno = "Edita Aluno"
     }
 
     private lateinit var campoNome: EditText
     private lateinit var campoTelefone: EditText
-
     private lateinit var campoEmail: EditText
-    private val alunosDao = AlunosDao()
+    private val alunosDao = AlunoDao()
 
     private val binding by lazy {
         ActivityFormularioAlunoBinding.inflate(layoutInflater)
     }
 
+    private var aluno: Aluno? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        title = tituloAppBar
+        title = tituloAppBarNovoAluno
         inicializaCampos()
         configuraBotaoSalvar()
+        carregaAluno()
+    }
+
+    private fun carregaAluno() {
+        val dados = intent
+        when {
+            dados.hasExtra(CHAVE_ALUNO) -> {
+                title = tituloAppBarEditaAluno
+                aluno = dados.getSerializableExtra(CHAVE_ALUNO) as Aluno
+                preencheCampos()
+            }
+            else -> {
+                title = tituloAppBarNovoAluno
+                aluno = Aluno()
+            }
+        }
+    }
+
+    private fun preencheCampos() {
+        campoNome.setText(aluno!!.nome)
+        campoTelefone.setText(aluno!!.telefone)
+        campoEmail.setText(aluno!!.email)
     }
 
     private fun configuraBotaoSalvar() {
         val botaoSalvar = binding.activityFormularioAlunoBotaoSalvar
         botaoSalvar.setOnClickListener {
-            val aluno = criaAluno()
-            salva(aluno)
+            finalizaFormulario()
         }
+    }
+
+    private fun finalizaFormulario() {
+        preencheAluno()
+        if (aluno?.temIdValido() == true) {
+            alunosDao.edita(aluno)
+        } else {
+            alunosDao.salva(aluno)
+        }
+        finish()
     }
 
     private fun inicializaCampos() {
@@ -44,15 +78,14 @@ class FormularioAlunoActivity : AppCompatActivity() {
         campoEmail = binding.activityFormularioAlunoCampoEmail
     }
 
-    private fun salva(aluno: Aluno) {
-        alunosDao.salva(aluno)
-        finish()
-    }
 
-    private fun criaAluno(): Aluno {
+    private fun preencheAluno() {
         val nome = campoNome.text.toString()
         val telefone = campoTelefone.text.toString()
         val email = campoEmail.text.toString()
-        return Aluno(nome, telefone, email)
+
+        aluno?.nome = nome
+        aluno?.telefone = telefone
+        aluno?.email = email
     }
 }

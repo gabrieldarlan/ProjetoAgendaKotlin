@@ -1,7 +1,20 @@
 package br.com.gdarlan.agenda.model
 
-data class Aluno(
-    val nome: String,
-    val telefone: String,
-    val email: String
-)
+import java.io.Serializable
+
+class Aluno(
+    var id: Int = 0,
+    var nome: String = "",
+    var telefone: String = "",
+    var email: String = ""
+) : Serializable {
+
+    override fun toString(): String {
+        return nome
+    }
+
+    fun temIdValido(): Boolean {
+        return id > 0
+    }
+
+}
