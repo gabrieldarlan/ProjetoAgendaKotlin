@@ -2,9 +2,14 @@ package br.com.gdarlan.agenda.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.ContextMenu
+import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import br.com.gdarlan.agenda.R
 import br.com.gdarlan.agenda.dao.AlunoDao
 import br.com.gdarlan.agenda.databinding.ActivityListaAlunosBinding
 import br.com.gdarlan.agenda.model.Aluno
@@ -27,6 +32,7 @@ class ListaAlunosActivity : AppCompatActivity() {
         title = tituloAppBar
         configuraFabNovoAluno()
         configuraLista()
+
         alunoDao.salva(Aluno(nome = "Alex", telefone = "111111", email = "alex@alura.com.br"))
         alunoDao.salva(Aluno(nome = "Fran", telefone = "222222", email = "fran@alura.com.br"))
 
@@ -35,6 +41,16 @@ class ListaAlunosActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         atualizaAlunos()
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        menuInflater.inflate(R.menu.activity_lista_alunos_menu, menu)
+
     }
 
     private fun atualizaAlunos() {
@@ -56,28 +72,27 @@ class ListaAlunosActivity : AppCompatActivity() {
 
     private fun configuraLista() {
         val listaDeAlunos = binding.activityListaAlunosListView
-
         configuraAdapter(listaDeAlunos)
         configuraListernerDeClickPorItem(listaDeAlunos)
-        configuraListenerDeCliqueLongoPorItem(listaDeAlunos)
+        registerForContextMenu(listaDeAlunos)
     }
 
-    private fun configuraListenerDeCliqueLongoPorItem(listaDeAlunos: ListView) {
-        listaDeAlunos.setOnItemLongClickListener { parent, view, position, id ->
-            val alunoEscolhido = parent.getItemAtPosition(position) as Aluno
-            remove(alunoEscolhido)
-            return@setOnItemLongClickListener (true)
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        val itemId = item.itemId
+        if (itemId == R.id.activity_lista_alunos_menu_remover) {
+            val menuInfo = item.menuInfo as AdapterView.AdapterContextMenuInfo
+            val aluno: Aluno? = adapter.getItem(menuInfo.position)
+            remove(aluno)
         }
+        return super.onContextItemSelected(item)
     }
 
-    private fun remove(aluno: Aluno) {
+    private fun remove(aluno: Aluno?) {
         alunoDao.remove(aluno)
         adapter.remove(aluno)
     }
 
-    private fun configuraListernerDeClickPorItem(
-        listaDeAlunos: ListView
-    ) {
+    private fun configuraListernerDeClickPorItem(listaDeAlunos: ListView) {
         listaDeAlunos.setOnItemClickListener { parent, view, position, id ->
             val alunoEscolhido = parent.getItemAtPosition(position) as Aluno
             abreFormularioModoEditaAluno(alunoEscolhido)

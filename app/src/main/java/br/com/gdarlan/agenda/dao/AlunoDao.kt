@@ -42,7 +42,7 @@ class AlunoDao {
 
     fun buscaTodos(): List<Aluno> = alunos.toList()
 
-    fun remove(aluno: Aluno) {
+    fun remove(aluno: Aluno?) {
         val alunoDevolvido = buscaAlunoPeloId(aluno)
         if (alunoDevolvido != null) {
             alunos.remove(alunoDevolvido)

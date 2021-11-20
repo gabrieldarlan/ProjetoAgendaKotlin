@@ -1,8 +1,11 @@
 package br.com.gdarlan.agenda.ui.activity
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import br.com.gdarlan.agenda.R
 import br.com.gdarlan.agenda.dao.AlunoDao
 import br.com.gdarlan.agenda.databinding.ActivityFormularioAlunoBinding
 import br.com.gdarlan.agenda.model.Aluno
@@ -30,8 +33,19 @@ class FormularioAlunoActivity : AppCompatActivity() {
         setContentView(binding.root)
         title = tituloAppBarNovoAluno
         inicializaCampos()
-        configuraBotaoSalvar()
         carregaAluno()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.activity_formulario_aluno_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.activity_formulario_aluno_menu -> finalizaFormulario()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun carregaAluno() {
@@ -55,19 +69,11 @@ class FormularioAlunoActivity : AppCompatActivity() {
         campoEmail.setText(aluno!!.email)
     }
 
-    private fun configuraBotaoSalvar() {
-        val botaoSalvar = binding.activityFormularioAlunoBotaoSalvar
-        botaoSalvar.setOnClickListener {
-            finalizaFormulario()
-        }
-    }
-
     private fun finalizaFormulario() {
         preencheAluno()
-        if (aluno?.temIdValido() == true) {
-            alunosDao.edita(aluno)
-        } else {
-            alunosDao.salva(aluno)
+        when {
+            aluno?.temIdValido() == true -> alunosDao.edita(aluno)
+            else -> alunosDao.salva(aluno)
         }
         finish()
     }
