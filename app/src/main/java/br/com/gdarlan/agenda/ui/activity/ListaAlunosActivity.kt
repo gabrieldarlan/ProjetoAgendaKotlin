@@ -2,17 +2,16 @@ package br.com.gdarlan.agenda.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.ContextMenu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import br.com.gdarlan.agenda.R
 import br.com.gdarlan.agenda.dao.AlunoDao
 import br.com.gdarlan.agenda.databinding.ActivityListaAlunosBinding
+
 import br.com.gdarlan.agenda.model.Aluno
+import br.com.gdarlan.agenda.ui.adapter.ListaAlunosAdapter
 
 class ListaAlunosActivity : AppCompatActivity() {
     companion object {
@@ -21,10 +20,12 @@ class ListaAlunosActivity : AppCompatActivity() {
     }
 
     private val alunoDao = AlunoDao()
+    private val adapter = ListaAlunosAdapter(this)
+
+
     private val binding by lazy {
         ActivityListaAlunosBinding.inflate(layoutInflater)
     }
-    private lateinit var adapter: ArrayAdapter<Aluno>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +82,7 @@ class ListaAlunosActivity : AppCompatActivity() {
         val itemId = item.itemId
         if (itemId == R.id.activity_lista_alunos_menu_remover) {
             val menuInfo = item.menuInfo as AdapterView.AdapterContextMenuInfo
-            val aluno: Aluno? = adapter.getItem(menuInfo.position)
+            val aluno: Aluno = adapter.getItem(menuInfo.position)
             remove(aluno)
         }
         return super.onContextItemSelected(item)
@@ -108,8 +109,8 @@ class ListaAlunosActivity : AppCompatActivity() {
     }
 
     private fun configuraAdapter(listaDeAlunos: ListView) {
-        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
         listaDeAlunos.adapter = adapter
     }
+
 }
 

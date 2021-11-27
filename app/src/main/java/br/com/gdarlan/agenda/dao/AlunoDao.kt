@@ -6,7 +6,7 @@ class AlunoDao {
 
     companion object {
         private val alunos = mutableListOf<Aluno>()
-        private var contadorDeIds = 1
+        private var contadorDeIds = 1L
     }
 
     fun salva(aluno: Aluno?) {
