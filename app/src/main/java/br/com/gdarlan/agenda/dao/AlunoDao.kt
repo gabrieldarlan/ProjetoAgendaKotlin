@@ -22,7 +22,7 @@ class AlunoDao {
     }
 
     fun edita(aluno: Aluno?) {
-        var alunoEncontrado: Aluno? = buscaAlunoPeloId(aluno)
+        val alunoEncontrado: Aluno? = buscaAlunoPeloId(aluno)
         if (alunoEncontrado != null) {
             val posicaoAluno = alunos.indexOf(alunoEncontrado)
             if (aluno != null) {

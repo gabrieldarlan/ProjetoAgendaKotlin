@@ -12,9 +12,9 @@ import br.com.gdarlan.agenda.model.Aluno
 
 class FormularioAlunoActivity : AppCompatActivity() {
     companion object {
-        private val tituloAppBarNovoAluno = "Novo Aluno"
-        private val CHAVE_ALUNO = "aluno"
-        private val tituloAppBarEditaAluno = "Edita Aluno"
+        private const val tituloAppBarNovoAluno = "Novo Aluno"
+        private const val CHAVE_ALUNO = "aluno"
+        private const val tituloAppBarEditaAluno = "Edita Aluno"
     }
 
     private lateinit var campoNome: EditText

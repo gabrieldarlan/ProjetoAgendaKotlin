@@ -23,34 +23,44 @@ class ListaAlunosAdapter(private val context: Context) : BaseAdapter() {
     }
 
     override fun getItemId(position: Int): Long {
-        return alunos[position].id;
+        return alunos[position].id
     }
 
     @SuppressLint("ViewHolder", "InflateParams")
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-
-        val viewCriada = LayoutInflater.from(context).inflate(R.layout.item_aluno, parent, false)
+    override fun getView(
+        position: Int,
+        convertView: View?,
+        parent: ViewGroup?
+    ): View {
+        val viewCriada = criaView(parent)
         val alunoDevolvido = alunos[position]
-
-        val nome = viewCriada.findViewById<TextView>(R.id.item_aluno_nome)
-        nome.text = alunoDevolvido.nome
-
-        val telefone = viewCriada.findViewById<TextView>(R.id.item_aluno_telefone)
-        telefone.text = alunoDevolvido.telefone
-
+        vincula(viewCriada, alunoDevolvido)
         return viewCriada
     }
 
-    fun clear() {
-        alunos.clear()
+    private fun vincula(
+        view: View,
+        aluno: Aluno
+    ) {
+        val nome = view.findViewById<TextView>(R.id.item_aluno_nome)
+        nome.text = aluno.nome
+
+        val telefone = view.findViewById<TextView>(R.id.item_aluno_telefone)
+        telefone.text = aluno.telefone
     }
 
-    fun addAll(alunos: List<Aluno>) {
+    private fun criaView(parent: ViewGroup?) =
+        LayoutInflater.from(context).inflate(R.layout.item_aluno, parent, false)
+
+    fun atualiza(alunos: List<Aluno>) {
+        this.alunos.clear()
         this.alunos.addAll(alunos)
+        notifyDataSetChanged()
     }
 
     fun remove(aluno: Aluno?) {
         alunos.remove(aluno)
+        notifyDataSetChanged()
     }
 
 }
